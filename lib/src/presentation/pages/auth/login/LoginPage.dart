@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/src/presentation/widgets/DefaultTextField.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -41,39 +42,23 @@ class LoginPage extends StatelessWidget {
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 25),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        label: Text(
-                          'Correo electrónico',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        prefixIcon: Icon(Icons.email, color: Colors.white),
-                      ),
+                    child: DefaultTextfield(
+                      label: 'Correo electrónico',
+                      icon: Icons.email,
+                      onChanged: (text) {
+                        print("Email: $text");
+                      },
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 25),
-                    child: TextField(
+                    child: DefaultTextfield(
+                      label: 'Contraseña',
+                      icon: Icons.lock,
                       obscureText: true,
-                      decoration: InputDecoration(
-                        label: Text(
-                          'Contraseña',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        prefixIcon: Icon(Icons.lock, color: Colors.white),
-                      ),
+                      onChanged: (text) {
+                        print("Password: $text");
+                      },
                     ),
                   ),
 
@@ -125,7 +110,9 @@ class LoginPage extends StatelessWidget {
                     height: 55,
                     margin: EdgeInsets.only(left: 25, right: 25, top: 15),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, 'register');
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                       ),

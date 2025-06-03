@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/src/presentation/pages/auth/login/LoginPage.dart';
+import 'package:store_app/src/presentation/pages/auth/register/RegisterPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       initialRoute: 'login',
-      routes: {'login': (context) => const LoginPage()},
+      routes: {
+        'login': (context) => const LoginPage(),
+        'register': (context) => const RegisterPage(),
+      },
     );
   }
 }
