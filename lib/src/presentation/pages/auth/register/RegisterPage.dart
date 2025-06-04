@@ -1,13 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/src/presentation/pages/auth/register/RegisterBlocCubit.dart';
 import 'package:store_app/src/presentation/widgets/DefaultButton.dart';
 import 'package:store_app/src/presentation/widgets/DefaultIconBack.dart';
 import 'package:store_app/src/presentation/widgets/DefaultTextField.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  RegisterBlocCubit? _registerBlocCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _registerBlocCubit?.dispose();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _registerBlocCubit = BlocProvider.of<RegisterBlocCubit>(
+      context,
+      listen: false,
+    );
+
     return Scaffold(
       body: Center(
         child: Container(
@@ -49,66 +71,102 @@ class RegisterPage extends StatelessWidget {
 
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25),
-                        child: DefaultTextfield(
-                          label: 'Nombre',
-                          icon: Icons.person,
-                          onChanged: (text) {
-                            print("Nombre: $text");
+                        child: StreamBuilder(
+                          stream: _registerBlocCubit?.nameStream,
+                          builder: (context, asyncSnapshot) {
+                            return DefaultTextfield(
+                              label: 'Nombre',
+                              errorText: asyncSnapshot.error?.toString(),
+                              icon: Icons.person,
+                              onChanged: (text) {
+                                _registerBlocCubit?.setName(text);
+                              },
+                            );
                           },
                         ),
                       ),
 
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25),
-                        child: DefaultTextfield(
-                          label: 'Apellido',
-                          icon: Icons.person,
-                          onChanged: (text) {
-                            print("Apellido: $text");
+                        child: StreamBuilder(
+                          stream: _registerBlocCubit?.lastnameStream,
+                          builder: (context, asyncSnapshot) {
+                            return DefaultTextfield(
+                              label: 'Apellido',
+                              errorText: asyncSnapshot.error?.toString(),
+                              icon: Icons.person,
+                              onChanged: (text) {
+                                _registerBlocCubit?.setLastname(text);
+                              },
+                            );
                           },
                         ),
                       ),
 
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25),
-                        child: DefaultTextfield(
-                          label: 'Email',
-                          icon: Icons.email,
-                          onChanged: (text) {
-                            print("Email: $text");
+                        child: StreamBuilder(
+                          stream: _registerBlocCubit?.emailStream,
+                          builder: (context, asyncSnapshot) {
+                            return DefaultTextfield(
+                              label: 'Email',
+                              errorText: asyncSnapshot.error?.toString(),
+                              icon: Icons.email,
+                              onChanged: (text) {
+                                _registerBlocCubit?.setEmail(text);
+                              },
+                            );
                           },
                         ),
                       ),
 
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25),
-                        child: DefaultTextfield(
-                          label: 'Teléfono',
-                          icon: Icons.phone,
-                          onChanged: (text) {
-                            print("Teléfono: $text");
+                        child: StreamBuilder(
+                          stream: _registerBlocCubit?.phoneStream,
+                          builder: (context, asyncSnapshot) {
+                            return DefaultTextfield(
+                              label: 'Teléfono',
+                              errorText: asyncSnapshot.error?.toString(),
+                              icon: Icons.phone,
+                              onChanged: (text) {
+                                _registerBlocCubit?.setPhone(text);
+                              },
+                            );
                           },
                         ),
                       ),
 
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25),
-                        child: DefaultTextfield(
-                          label: 'Contraseña',
-                          icon: Icons.lock,
-                          onChanged: (text) {
-                            print("Contraseña: $text");
+                        child: StreamBuilder(
+                          stream: _registerBlocCubit?.passwordStream,
+                          builder: (context, asyncSnapshot) {
+                            return DefaultTextfield(
+                              label: 'Contraseña',
+                              errorText: asyncSnapshot.error?.toString(),
+                              icon: Icons.lock,
+                              onChanged: (text) {
+                                _registerBlocCubit?.setPassword(text);
+                              },
+                            );
                           },
                         ),
                       ),
 
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25),
-                        child: DefaultTextfield(
-                          label: 'Confirmar Contraseña',
-                          icon: Icons.lock_outline,
-                          onChanged: (text) {
-                            print("Confirmar Contraseña: $text");
+                        child: StreamBuilder(
+                          stream: _registerBlocCubit?.confirmPasswordStream,
+                          builder: (context, asyncSnapshot) {
+                            return DefaultTextfield(
+                              label: 'Confirmar Contraseña',
+                              errorText: asyncSnapshot.error?.toString(),
+                              icon: Icons.lock_outline,
+                              onChanged: (text) {
+                                _registerBlocCubit?.setConfirmPassword(text);
+                              },
+                            );
                           },
                         ),
                       ),
@@ -118,9 +176,31 @@ class RegisterPage extends StatelessWidget {
                           horizontal: 25,
                           vertical: 20,
                         ),
-                        child: DefaultButton(
-                          label: 'Registrarse',
-                          onPressed: () {},
+                        child: StreamBuilder(
+                          stream: _registerBlocCubit?.isFormValid,
+                          builder: (context, asyncSnapshot) {
+                            return DefaultButton(
+                              label: 'Registrarse',
+                              color:
+                                  asyncSnapshot.hasData && asyncSnapshot.data!
+                                  ? Colors.black
+                                  : Colors.grey,
+                              onPressed: () {
+                                if (asyncSnapshot.hasData &&
+                                    asyncSnapshot.data!) {
+                                  _registerBlocCubit?.register();
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Por favor, complete todos los campos correctamente.',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                            );
+                          },
                         ),
                       ),
                     ],

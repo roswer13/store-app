@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/src/presentation/pages/auth/login/LoginBlocCubit.dart';
 import 'package:store_app/src/presentation/widgets/DefaultTextField.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  LoginBlocCubit? _loginBlocCubit;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loginBlocCubit?.dispose();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _loginBlocCubit = BlocProvider.of<LoginBlocCubit>(context, listen: false);
+
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
@@ -42,22 +62,34 @@ class LoginPage extends StatelessWidget {
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 25),
-                    child: DefaultTextfield(
-                      label: 'Correo electrónico',
-                      icon: Icons.email,
-                      onChanged: (text) {
-                        print("Email: $text");
+                    child: StreamBuilder(
+                      stream: _loginBlocCubit?.emailStream,
+                      builder: (context, snapshot) {
+                        return DefaultTextfield(
+                          label: 'Correo electrónico',
+                          icon: Icons.email,
+                          errorText: snapshot.error?.toString(),
+                          onChanged: (text) {
+                            _loginBlocCubit?.setEmail(text);
+                          },
+                        );
                       },
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 25),
-                    child: DefaultTextfield(
-                      label: 'Contraseña',
-                      icon: Icons.lock,
-                      obscureText: true,
-                      onChanged: (text) {
-                        print("Password: $text");
+                    child: StreamBuilder(
+                      stream: _loginBlocCubit?.passwordStream,
+                      builder: (context, snapshot) {
+                        return DefaultTextfield(
+                          label: 'Contraseña',
+                          icon: Icons.lock,
+                          errorText: snapshot.error?.toString(),
+                          obscureText: true,
+                          onChanged: (text) {
+                            _loginBlocCubit?.setPassword(text);
+                          },
+                        );
                       },
                     ),
                   ),
@@ -71,15 +103,37 @@ class LoginPage extends StatelessWidget {
                       top: 15,
                       bottom: 15,
                     ),
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                      ),
-                      child: Text(
-                        'Iniciar sesión',
-                        style: TextStyle(color: Colors.black),
-                      ),
+                    child: StreamBuilder(
+                      stream: _loginBlocCubit?.isFormValid,
+                      builder: (context, asyncSnapshot) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            if (asyncSnapshot.hasData && asyncSnapshot.data!) {
+                              // If the form is valid, proceed with login
+                              _loginBlocCubit?.login();
+                            } else {
+                              // Show an error message or handle invalid form state
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Por favor, completa todos los campos correctamente.',
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                asyncSnapshot.hasData && asyncSnapshot.data!
+                                ? Colors.green
+                                : Colors.grey,
+                          ),
+                          child: Text(
+                            'Iniciar sesión',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        );
+                      },
                     ),
                   ),
 
