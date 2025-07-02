@@ -21,7 +21,7 @@ class Success<T> extends Resource<T> {
 }
 
 /// Represents an error state with an associated error message.
-class Error extends Resource {
+class Error<T> extends Resource<T> {
   /// The error message describing what went wrong.
   final String message;
 

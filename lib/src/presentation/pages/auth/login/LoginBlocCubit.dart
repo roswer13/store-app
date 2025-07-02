@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:store_app/src/domain/useCases/auth/AuthUseCases.dart';
 
-import 'package:store_app/src/data/dataSource/remote/services/AuthService.dart';
-import 'package:store_app/src/domain/models/AuthResponse.dart';
+import 'package:store_app/src/domain/useCases/auth/LoginUseCase.dart';
 import 'package:store_app/src/domain/utils/Resource.dart';
 import 'package:store_app/src/presentation/pages/auth/login/LoginBlocState.dart';
 
 class LoginBlocCubit extends Cubit<LoginBlocState> {
-  LoginBlocCubit() : super(LoginInitial());
+  AuthUseCases authUseCases;
 
-  Authservice authService = Authservice();
+  LoginBlocCubit(this.authUseCases) : super(LoginInitial());
 
   final _emailController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();
@@ -55,8 +55,7 @@ class LoginBlocCubit extends Cubit<LoginBlocState> {
       print('Logging in with email: $email and password: $password');
       // Emit a success state or handle errors as needed
       // Add delay example
-      await Future.delayed(Duration(seconds: 2), () {});
-      Resource response = await authService.login(email, password);
+      Resource response = await authUseCases.login.run(email, password);
       _responseController.add(response);
       Future.delayed(const Duration(seconds: 1), () {
         _responseController.add(Initial());

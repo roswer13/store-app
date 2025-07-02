@@ -1,9 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:store_app/src/domain/models/User.dart';
+import 'package:store_app/src/domain/useCases/auth/AuthUseCases.dart';
+import 'package:store_app/src/domain/utils/Resource.dart';
 import 'package:store_app/src/presentation/pages/auth/register/RegisterBlocState.dart';
 
 class RegisterBlocCubit extends Cubit<RegisterBlocState> {
-  RegisterBlocCubit() : super(RegisterInitial());
+  AuthUseCases authUseCases;
+
+  RegisterBlocCubit(this.authUseCases) : super(RegisterInitial());
 
   final _nameController = BehaviorSubject<String>();
   final _lastnameController = BehaviorSubject<String>();
@@ -11,6 +16,7 @@ class RegisterBlocCubit extends Cubit<RegisterBlocState> {
   final _phoneController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();
   final _confirmPasswordController = BehaviorSubject<String>();
+  final _responseController = BehaviorSubject<Resource>();
 
   Stream<String> get nameStream => _nameController.stream;
   Stream<String> get lastnameStream => _lastnameController.stream;
@@ -18,6 +24,7 @@ class RegisterBlocCubit extends Cubit<RegisterBlocState> {
   Stream<String> get phoneStream => _phoneController.stream;
   Stream<String> get passwordStream => _passwordController.stream;
   Stream<String> get confirmPasswordStream => _confirmPasswordController.stream;
+  Stream<Resource> get responseStream => _responseController.stream;
 
   Stream<bool> get isFormValid => Rx.combineLatest6(
     nameStream,
@@ -36,13 +43,24 @@ class RegisterBlocCubit extends Cubit<RegisterBlocState> {
     ) => true,
   );
 
-  void register() {
-    print('Email: ${_emailController.value}');
-    print('Name: ${_nameController.value}');
-    print('Lastname: ${_lastnameController.value}');
-    print('Phone: ${_phoneController.value}');
-    print('Password: ${_passwordController.value}');
-    print('Confirm Password: ${_confirmPasswordController.value}');
+  toUser() => User(
+    name: _nameController.value,
+    lastname: _lastnameController.value,
+    email: _emailController.value,
+    phone: _phoneController.value,
+    password: _passwordController.value,
+  );
+
+  void register() async {
+    _responseController.add(Loading());
+
+    Resource<User> response = await authUseCases.register.run(toUser());
+
+    _responseController.add(response);
+
+    Future.delayed(const Duration(seconds: 1), () {
+      _responseController.add(Initial());
+    });
   }
 
   void setName(String name) {

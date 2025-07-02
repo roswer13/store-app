@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:store_app/blocProviders.dart';
+import 'package:store_app/injection.dart';
 import 'package:store_app/src/presentation/pages/auth/login/LoginPage.dart';
 import 'package:store_app/src/presentation/pages/auth/register/RegisterPage.dart';
 
-void main() {
+void main() async {
+  await configureDependencies();
   runApp(const MyApp());
 }
 
