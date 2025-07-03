@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/src/domain/utils/Resource.dart';
-import 'package:store_app/src/presentation/pages/auth/login/LoginBlocCubit.dart';
+import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginBloc.dart';
 
 class LoginResponse extends StatelessWidget {
-  final LoginBlocCubit? bloc;
+  final LoginBloc? bloc;
 
   LoginResponse(this.bloc);
 

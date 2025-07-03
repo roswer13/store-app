@@ -1,15 +1,71 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:store_app/src/domain/useCases/auth/AuthUseCases.dart';
 
-import 'package:store_app/src/domain/useCases/auth/LoginUseCase.dart';
 import 'package:store_app/src/domain/utils/Resource.dart';
-import 'package:store_app/src/presentation/pages/auth/login/LoginBlocState.dart';
+import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginEvent.dart';
+import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginState.dart';
+import 'package:store_app/src/presentation/utils/BlocFormItem.dart';
 
-class LoginBlocCubit extends Cubit<LoginBlocState> {
+class LoginBloc extends Bloc<LoginEvent, LoginState> {
   AuthUseCases authUseCases;
 
-  LoginBlocCubit(this.authUseCases) : super(LoginInitial());
+  LoginBloc(this.authUseCases) : super(LoginState()) {
+    on<LoginInitialEvent>(_onLoginInitialEvent);
+    on<EmailChanged>(_onEmailChanged);
+    on<PasswordChanged>(_onPasswordChanged);
+    on<LoginSubmitted>(_onLoginSubmitted);
+  }
+
+  final formKey = GlobalKey<FormState>();
+
+  Future<void> _onLoginInitialEvent(
+    LoginInitialEvent event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(state.copyWith(formKey: formKey));
+  }
+
+  Future<void> _onEmailChanged(
+    EmailChanged event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        email: BlocFormItem(value: event.email.value),
+        formKey: formKey,
+      ),
+    );
+  }
+
+  Future<void> _onPasswordChanged(
+    PasswordChanged event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        password: BlocFormItem(value: event.password.value),
+        formKey: formKey,
+      ),
+    );
+  }
+
+  Future<void> _onLoginSubmitted(
+    LoginSubmitted event,
+    Emitter<LoginState> emit,
+  ) async {
+    _responseController.add(Loading());
+    Resource response = await authUseCases.login.run(
+      state.email.value,
+      state.password.value,
+    );
+    _responseController.add(response);
+    Future.delayed(const Duration(seconds: 1), () {
+      _responseController.add(Initial());
+    });
+    print('Login successful: ${response}');
+  }
 
   final _emailController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();

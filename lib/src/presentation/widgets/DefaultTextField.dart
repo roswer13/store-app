@@ -8,17 +8,17 @@ class DefaultTextfield extends StatelessWidget {
   bool obscureText;
 
   DefaultTextfield({
-    super.key,
+    Key? key,
     required this.label,
     required this.icon,
     required this.onChanged,
     this.errorText,
     this.obscureText = false,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       obscureText: obscureText,
       decoration: InputDecoration(
         label: Text(label, style: TextStyle(color: Colors.white)),

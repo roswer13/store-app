@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 import 'package:store_app/src/presentation/pages/auth/register/RegisterBlocCubit.dart';
 import 'package:store_app/src/presentation/widgets/DefaultButton.dart';
 import 'package:store_app/src/presentation/widgets/DefaultIconBack.dart';
