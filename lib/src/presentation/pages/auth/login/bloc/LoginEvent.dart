@@ -15,6 +15,10 @@ class LoginInitialEvent extends LoginEvent {
   List<Object?> get props => [];
 }
 
+class LoginFormReset extends LoginEvent {
+  const LoginFormReset();
+}
+
 class EmailChanged extends LoginEvent {
   final BlocFormItem email;
 
@@ -35,7 +39,4 @@ class PasswordChanged extends LoginEvent {
 
 class LoginSubmitted extends LoginEvent {
   const LoginSubmitted();
-
-  @override
-  List<Object?> get props => [];
 }

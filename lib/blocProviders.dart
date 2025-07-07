@@ -3,14 +3,16 @@ import 'package:store_app/injection.dart';
 import 'package:store_app/src/domain/useCases/auth/AuthUseCases.dart';
 import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginBloc.dart';
 import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginEvent.dart';
-import 'package:store_app/src/presentation/pages/auth/register/RegisterBlocCubit.dart';
+import 'package:store_app/src/presentation/pages/auth/register/bloc/RegisterBloc.dart';
+import 'package:store_app/src/presentation/pages/auth/register/bloc/RegisterEvent.dart';
 
 List<BlocProvider> blocProviders = [
   BlocProvider<LoginBloc>(
     create: (context) =>
         LoginBloc(locator<AuthUseCases>())..add(LoginInitialEvent()),
   ),
-  BlocProvider<RegisterBlocCubit>(
-    create: (context) => RegisterBlocCubit(locator<AuthUseCases>()),
+  BlocProvider<RegisterBloc>(
+    create: (context) =>
+        RegisterBloc(locator<AuthUseCases>())..add(RegisterInitialEvent()),
   ),
 ];

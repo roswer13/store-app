@@ -24,7 +24,7 @@ class AuthService {
         AuthResponse authResponse = AuthResponse.fromJson(data);
         return Success<AuthResponse>(authResponse);
       } else {
-        return Error(data['message'] ?? 'Login failed');
+        return Error(listToString(data['message']));
       }
     } catch (e) {
       // Handle error

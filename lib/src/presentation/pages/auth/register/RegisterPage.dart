@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:store_app/src/presentation/pages/auth/register/RegisterBlocCubit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:store_app/src/domain/utils/Resource.dart';
 import 'package:store_app/src/presentation/pages/auth/register/RegisterContent.dart';
-import 'package:store_app/src/presentation/pages/auth/register/RegisterResponse.dart';
+import 'package:store_app/src/presentation/pages/auth/register/bloc/RegisterBloc.dart';
+import 'package:store_app/src/presentation/pages/auth/register/bloc/RegisterEvent.dart';
+import 'package:store_app/src/presentation/pages/auth/register/bloc/RegisterState.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -12,34 +15,47 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  RegisterBlocCubit? _registerBlocCubit;
+  RegisterBloc? _bloc;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _registerBlocCubit?.dispose();
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    _registerBlocCubit = BlocProvider.of<RegisterBlocCubit>(
-      context,
-      listen: false,
-    );
+    _bloc = BlocProvider.of<RegisterBloc>(context);
 
     return Scaffold(
       body: Center(
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              RegisterContent(_registerBlocCubit),
-              RegisterResponse(_registerBlocCubit),
-            ],
+          child: BlocListener<RegisterBloc, RegisterState>(
+            bloc: _bloc,
+            listener: (context, state) {
+              final responseState = state.response;
+
+              if (responseState is Error) {
+                // Show an error message if registration fails
+                Fluttertoast.showToast(
+                  msg: responseState.message,
+                  toastLength: Toast.LENGTH_LONG,
+                );
+              } else if (responseState is Success) {
+                _bloc?.add(RegisterFormReset());
+                // Navigate to the home page on successful registration
+                Fluttertoast.showToast(
+                  msg: 'Register successful',
+                  toastLength: Toast.LENGTH_LONG,
+                );
+              }
+            },
+            child: BlocBuilder<RegisterBloc, RegisterState>(
+              builder: (context, state) {
+                return RegisterContent(_bloc, state);
+              },
+            ),
           ),
         ),
       ),
