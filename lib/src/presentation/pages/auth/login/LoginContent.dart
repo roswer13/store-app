@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginBloc.dart';
 import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginEvent.dart';
 import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginState.dart';
@@ -19,14 +20,7 @@ class LoginContent extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Image.asset(
-            'assets/img/background1.jpg',
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-            color: Colors.black54,
-            colorBlendMode: BlendMode.darken,
-          ),
+          _imageBackground(context),
           Container(
             width: MediaQuery.of(context).size.width * 0.85,
             height: MediaQuery.of(context).size.height * 0.75,
@@ -47,37 +41,8 @@ class LoginContent extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 25),
-                  child: DefaultTextfield(
-                    label: 'Correo electrónico',
-                    icon: Icons.email,
-                    //errorText: snapshot.error?.toString(),
-                    onChanged: (text) {
-                      bloc?.add(EmailChanged(email: BlocFormItem(value: text)));
-                    },
-                    validator: (value) {
-                      return state.email.error;
-                    },
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 25),
-                  child: DefaultTextfield(
-                    label: 'Contraseña',
-                    icon: Icons.lock,
-                    // errorText: snapshot.error?.toString(),
-                    obscureText: true,
-                    onChanged: (text) {
-                      bloc?.add(
-                        PasswordChanged(password: BlocFormItem(value: text)),
-                      );
-                    },
-                    validator: (value) {
-                      return state.password.error;
-                    },
-                  ),
-                ),
+                _textFieldEmail(context),
+                _textFieldPassword(context),
 
                 Container(
                   width: MediaQuery.of(context).size.width * 0.85,
@@ -90,14 +55,12 @@ class LoginContent extends StatelessWidget {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      if (!state.formKey!.currentState!.validate()) {
+                      if (state.formKey!.currentState!.validate()) {
                         bloc?.add(LoginSubmitted());
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('El formulario no es válido'),
-                            duration: Duration(seconds: 2),
-                          ),
+                        Fluttertoast.showToast(
+                          msg: 'El formulario no es válido',
+                          toastLength: Toast.LENGTH_SHORT,
                         );
                       }
                     },
@@ -155,6 +118,51 @@ class LoginContent extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _textFieldEmail(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 25),
+      child: DefaultTextfield(
+        label: 'Correo electrónico',
+        icon: Icons.email,
+        //errorText: snapshot.error?.toString(),
+        onChanged: (text) {
+          bloc?.add(EmailChanged(email: BlocFormItem(value: text)));
+        },
+        validator: (value) {
+          return state.email.error;
+        },
+      ),
+    );
+  }
+
+  Widget _textFieldPassword(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 25),
+      child: DefaultTextfield(
+        label: 'Contraseña',
+        icon: Icons.lock,
+        obscureText: true,
+        onChanged: (text) {
+          bloc?.add(PasswordChanged(password: BlocFormItem(value: text)));
+        },
+        validator: (value) {
+          return state.password.error;
+        },
+      ),
+    );
+  }
+
+  Widget _imageBackground(BuildContext context) {
+    return Image.asset(
+      'assets/img/background1.jpg',
+      width: double.infinity,
+      height: double.infinity,
+      fit: BoxFit.cover,
+      color: Colors.black54,
+      colorBlendMode: BlendMode.darken,
     );
   }
 }

@@ -53,6 +53,14 @@ class _RegisterPageState extends State<RegisterPage> {
             },
             child: BlocBuilder<RegisterBloc, RegisterState>(
               builder: (context, state) {
+                if (state.response is Loading) {
+                  return Stack(
+                    children: [
+                      RegisterContent(_bloc, state),
+                      Center(child: CircularProgressIndicator()),
+                    ],
+                  );
+                }
                 return RegisterContent(_bloc, state);
               },
             ),

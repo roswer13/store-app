@@ -17,6 +17,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<PasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onLoginSubmitted);
     on<LoginFormReset>(_onLoginFormReset);
+    on<LoginSaveUserSession>(_onLoginSaveUserSession);
   }
 
   final formKey = GlobalKey<FormState>();
@@ -25,6 +26,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginInitialEvent event,
     Emitter<LoginState> emit,
   ) async {
+    AuthResponse? authResponse = await authUseCases.getUserSession.run();
+    print('User session retrieved: ${authResponse?.toJson()}');
     emit(state.copyWith(formKey: formKey));
   }
 
@@ -68,16 +71,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     emit(state.copyWith(response: Loading(), formKey: formKey));
 
+    print(
+      'Submitting login with email: ${state.email.value} and password: ${state.password.value}',
+    );
     Resource response = await authUseCases.login.run(
       state.email.value,
       state.password.value,
     );
     emit(state.copyWith(response: response, formKey: formKey));
-    /*
-    Future.delayed(const Duration(seconds: 1), () {
-      emit(state.copyWith(response: Initial()));
-    });
-    */
+
     print('Login successful: ${response}');
   }
 
@@ -86,5 +88,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     state.formKey?.currentState?.reset();
+  }
+
+  Future<void> _onLoginSaveUserSession(
+    LoginSaveUserSession event,
+    Emitter<LoginState> emit,
+  ) async {
+    await authUseCases.saveUserSession.run(event.response);
   }
 }

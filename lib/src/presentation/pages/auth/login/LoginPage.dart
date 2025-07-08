@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:store_app/src/domain/models/AuthResponse.dart';
 import 'package:store_app/src/domain/utils/Resource.dart';
 
 import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginBloc.dart';
 import 'package:store_app/src/presentation/pages/auth/login/LoginContent.dart';
+import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginEvent.dart';
 import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginState.dart';
 
 class LoginPage extends StatefulWidget {
@@ -44,6 +46,12 @@ class _LoginPageState extends State<LoginPage> {
                 toastLength: Toast.LENGTH_LONG,
               );
             } else if (responseState is Success) {
+              _bloc?.add(
+                LoginSaveUserSession(
+                  response: responseState.data as AuthResponse,
+                ),
+              );
+              _bloc?.add(LoginFormReset());
               // Navigate to the home page on successful login
               Fluttertoast.showToast(
                 msg: 'Login successful',
@@ -53,6 +61,14 @@ class _LoginPageState extends State<LoginPage> {
           },
           child: BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {
+              if (state.response is Loading) {
+                return Stack(
+                  children: [
+                    LoginContent(_bloc, state),
+                    Center(child: CircularProgressIndicator()),
+                  ],
+                );
+              }
               return LoginContent(_bloc, state);
             },
           ),
