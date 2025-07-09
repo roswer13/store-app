@@ -29,6 +29,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     AuthResponse? authResponse = await authUseCases.getUserSession.run();
     print('User session retrieved: ${authResponse?.toJson()}');
     emit(state.copyWith(formKey: formKey));
+
+    if (authResponse != null) {
+      print('User session exists, navigating to roles page');
+      emit(state.copyWith(response: Success(authResponse), formKey: formKey));
+    }
   }
 
   Future<void> _onEmailChanged(

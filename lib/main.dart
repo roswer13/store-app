@@ -4,8 +4,10 @@ import 'package:store_app/blocProviders.dart';
 import 'package:store_app/injection.dart';
 import 'package:store_app/src/presentation/pages/auth/login/LoginPage.dart';
 import 'package:store_app/src/presentation/pages/auth/register/RegisterPage.dart';
+import 'package:store_app/src/presentation/pages/roles/RolesPage.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
   runApp(const MyApp());
 }
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
         routes: {
           'login': (context) => const LoginPage(),
           'register': (context) => const RegisterPage(),
+          'roles': (context) => const RolesPage(),
         },
       ),
     );

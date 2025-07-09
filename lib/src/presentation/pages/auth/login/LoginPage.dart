@@ -51,12 +51,15 @@ class _LoginPageState extends State<LoginPage> {
                   response: responseState.data as AuthResponse,
                 ),
               );
-              _bloc?.add(LoginFormReset());
+              //_bloc?.add(LoginFormReset());
               // Navigate to the home page on successful login
               Fluttertoast.showToast(
                 msg: 'Login successful',
                 toastLength: Toast.LENGTH_LONG,
               );
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushReplacementNamed(context, 'roles');
+              });
             }
           },
           child: BlocBuilder<LoginBloc, LoginState>(
