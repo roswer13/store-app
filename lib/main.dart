@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:store_app/blocProviders.dart';
 import 'package:store_app/injection.dart';
+import 'package:store_app/src/presentation/pages/admin/category/list/AdminCategoryListPage.dart';
+
+import 'package:store_app/src/presentation/pages/admin/home/AdminHomePage.dart';
+import 'package:store_app/src/presentation/pages/admin/product/list/AdminProductListPage.dart';
 import 'package:store_app/src/presentation/pages/auth/login/LoginPage.dart';
 import 'package:store_app/src/presentation/pages/auth/register/RegisterPage.dart';
+import 'package:store_app/src/presentation/pages/client/home/ClientHomePage.dart';
 import 'package:store_app/src/presentation/pages/roles/RolesPage.dart';
 
 void main() async {
@@ -30,6 +35,10 @@ class MyApp extends StatelessWidget {
           'login': (context) => const LoginPage(),
           'register': (context) => const RegisterPage(),
           'roles': (context) => const RolesPage(),
+          'admin/home': (context) => const AdminHomePage(),
+          'admin/products': (context) => const AdminProductListPage(),
+          'admin/categories': (context) => const AdminCategoryListPage(),
+          'client/home': (context) => const ClientHomePage(),
         },
       ),
     );
