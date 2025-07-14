@@ -6,6 +6,7 @@ import 'package:store_app/src/presentation/pages/admin/home/bloc/AdminHmeState.d
 import 'package:store_app/src/presentation/pages/admin/home/bloc/AdminHomeBloc.dart';
 import 'package:store_app/src/presentation/pages/admin/home/bloc/AdminHomeEvent.dart';
 import 'package:store_app/src/presentation/pages/admin/product/list/AdminProductListPage.dart';
+import 'package:store_app/src/presentation/pages/profile/info/ProfileInfoPage.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
@@ -20,6 +21,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   List<Widget> pagesList = <Widget>[
     const AdminCategoryListPage(),
     const AdminProductListPage(),
+    const ProfileInfoPage(),
   ];
 
   @override
@@ -54,6 +56,14 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   selected: state.pageIndex == 1,
                   onTap: () {
                     _bloc?.add(AdminChangeDrawerPage(pageIndex: 1));
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Perfil de Usuario'),
+                  selected: state.pageIndex == 2,
+                  onTap: () {
+                    _bloc?.add(AdminChangeDrawerPage(pageIndex: 2));
                     Navigator.pop(context);
                   },
                 ),

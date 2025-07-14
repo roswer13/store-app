@@ -7,6 +7,8 @@ import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginBloc.dart'
 import 'package:store_app/src/presentation/pages/auth/login/bloc/LoginEvent.dart';
 import 'package:store_app/src/presentation/pages/auth/register/bloc/RegisterBloc.dart';
 import 'package:store_app/src/presentation/pages/auth/register/bloc/RegisterEvent.dart';
+import 'package:store_app/src/presentation/pages/profile/info/bloc/ProfileInfoBloc.dart';
+import 'package:store_app/src/presentation/pages/profile/info/bloc/ProfileInfoEvent.dart';
 import 'package:store_app/src/presentation/pages/roles/bloc/RolesBloc.dart';
 import 'package:store_app/src/presentation/pages/roles/bloc/RolesEvent.dart';
 
@@ -25,5 +27,10 @@ List<BlocProvider> blocProviders = [
   ),
   BlocProvider<AdminHomeBloc>(
     create: (context) => AdminHomeBloc(locator<AuthUseCases>()),
+  ),
+  BlocProvider<ProfileInfoBloc>(
+    create: (context) =>
+        ProfileInfoBloc(authUseCases: locator<AuthUseCases>())
+          ..add(ProfileInfoGetUser()),
   ),
 ];

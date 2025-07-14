@@ -1,3 +1,3 @@
 class Apiconfig {
-  static const String apiCommerce = "192.168.1.14:3000";
+  static const String apiCommerce = "192.168.1.131:3000";
 }

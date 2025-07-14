@@ -9,6 +9,7 @@ import 'package:store_app/src/presentation/pages/admin/product/list/AdminProduct
 import 'package:store_app/src/presentation/pages/auth/login/LoginPage.dart';
 import 'package:store_app/src/presentation/pages/auth/register/RegisterPage.dart';
 import 'package:store_app/src/presentation/pages/client/home/ClientHomePage.dart';
+import 'package:store_app/src/presentation/pages/profile/info/ProfileInfoPage.dart';
 import 'package:store_app/src/presentation/pages/roles/RolesPage.dart';
 
 void main() async {
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
           'login': (context) => const LoginPage(),
           'register': (context) => const RegisterPage(),
           'roles': (context) => const RolesPage(),
+          'profile/info': (context) => const ProfileInfoPage(),
           'admin/home': (context) => const AdminHomePage(),
           'admin/products': (context) => const AdminProductListPage(),
           'admin/categories': (context) => const AdminCategoryListPage(),
