@@ -9,6 +9,8 @@ import 'package:store_app/src/presentation/pages/auth/register/bloc/RegisterBloc
 import 'package:store_app/src/presentation/pages/auth/register/bloc/RegisterEvent.dart';
 import 'package:store_app/src/presentation/pages/profile/info/bloc/ProfileInfoBloc.dart';
 import 'package:store_app/src/presentation/pages/profile/info/bloc/ProfileInfoEvent.dart';
+import 'package:store_app/src/presentation/pages/profile/update/bloc/ProfileUpdateBloc.dart';
+import 'package:store_app/src/presentation/pages/profile/update/bloc/ProfileUpdateEvent.dart';
 import 'package:store_app/src/presentation/pages/roles/bloc/RolesBloc.dart';
 import 'package:store_app/src/presentation/pages/roles/bloc/RolesEvent.dart';
 
@@ -32,5 +34,8 @@ List<BlocProvider> blocProviders = [
     create: (context) =>
         ProfileInfoBloc(authUseCases: locator<AuthUseCases>())
           ..add(ProfileInfoGetUser()),
+  ),
+  BlocProvider<ProfileUpdateBloc>(
+    create: (context) => ProfileUpdateBloc()..add(ProfileUpdateInitEvent()),
   ),
 ];
