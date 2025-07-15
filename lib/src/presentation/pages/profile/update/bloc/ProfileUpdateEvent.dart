@@ -42,3 +42,11 @@ class ProfileUpdateChangePhone extends ProfileUpdateEvent {
 class ProfileUpdateFormSubmit extends ProfileUpdateEvent {
   const ProfileUpdateFormSubmit();
 }
+
+class ProfileUpdatePickImage extends ProfileUpdateEvent {
+  const ProfileUpdatePickImage();
+}
+
+class ProfileUpdateTakePhoto extends ProfileUpdateEvent {
+  const ProfileUpdateTakePhoto();
+}

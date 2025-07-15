@@ -5,6 +5,7 @@ import 'package:store_app/src/presentation/pages/profile/update/bloc/ProfileUpda
 import 'package:store_app/src/presentation/pages/profile/update/bloc/ProfileUpdateEvent.dart';
 import 'package:store_app/src/presentation/pages/profile/update/bloc/ProfileUpdateState.dart';
 import 'package:store_app/src/presentation/utils/BlocFormItem.dart';
+import 'package:store_app/src/presentation/utils/SelectOptionImageDialog.dart';
 import 'package:store_app/src/presentation/widgets/DefaultIconBack.dart';
 import 'package:store_app/src/presentation/widgets/DefaultTextField.dart';
 
@@ -145,18 +146,31 @@ class ProfileUpdateContent extends StatelessWidget {
   }
 
   Widget _imageProfile(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 100),
-      width: 150,
-      child: AspectRatio(
-        aspectRatio: 1 / 1,
-        child: ClipOval(
-          child: FadeInImage.assetNetwork(
-            image:
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
-            fit: BoxFit.cover,
-            placeholder: 'assets/img/user.png',
-            fadeInDuration: const Duration(seconds: 1),
+    return GestureDetector(
+      onTap: () {
+        //bloc?.add(ProfileUpdatePickImage());
+        //bloc?.add(ProfileUpdateTakePhoto());
+        SelectOptionImageDialog(
+          context,
+          () => bloc?.add(ProfileUpdatePickImage()),
+          () => bloc?.add(ProfileUpdateTakePhoto()),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 100),
+        width: 150,
+        child: AspectRatio(
+          aspectRatio: 1 / 1,
+          child: ClipOval(
+            child: state.image != null
+                ? Image.file(state.image!, fit: BoxFit.cover)
+                : FadeInImage.assetNetwork(
+                    image:
+                        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
+                    fit: BoxFit.cover,
+                    placeholder: 'assets/img/user.png',
+                    fadeInDuration: const Duration(seconds: 1),
+                  ),
           ),
         ),
       ),
