@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:store_app/src/domain/models/User.dart';
 import 'package:store_app/src/presentation/utils/BlocFormItem.dart';
 
 abstract class ProfileUpdateEvent extends Equatable {
@@ -9,7 +10,21 @@ abstract class ProfileUpdateEvent extends Equatable {
 }
 
 class ProfileUpdateInitEvent extends ProfileUpdateEvent {
-  const ProfileUpdateInitEvent();
+  final User? user;
+
+  const ProfileUpdateInitEvent({required this.user});
+
+  @override
+  List<Object?> get props => [user];
+}
+
+class ProfileUpdateUpdateUserSession extends ProfileUpdateEvent {
+  final User user;
+
+  const ProfileUpdateUpdateUserSession({required this.user});
+
+  @override
+  List<Object?> get props => [user];
 }
 
 class ProfileUpdateChangeName extends ProfileUpdateEvent {

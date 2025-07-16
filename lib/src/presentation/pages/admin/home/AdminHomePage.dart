@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/main.dart';
 import 'package:store_app/src/presentation/pages/admin/category/list/AdminCategoryListPage.dart';
 
 import 'package:store_app/src/presentation/pages/admin/home/bloc/AdminHmeState.dart';
@@ -71,9 +72,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   title: const Text('Cerrar Sesión'),
                   onTap: () {
                     _bloc?.add(AdminLogout());
-                    Navigator.pushNamedAndRemoveUntil(
+                    Navigator.pushAndRemoveUntil(
                       context,
-                      'login',
+                      MaterialPageRoute(builder: (context) => const MyApp()),
                       (route) => false,
                     );
                   },

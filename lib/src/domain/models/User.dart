@@ -4,7 +4,7 @@ class User {
   int? id;
   String name;
   String lastname;
-  String email;
+  String? email;
   String phone;
   String? password;
   String? image;
@@ -15,7 +15,7 @@ class User {
     this.id,
     required this.name,
     required this.lastname,
-    required this.email,
+    this.email,
     required this.phone,
     this.password,
     this.image,

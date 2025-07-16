@@ -81,13 +81,15 @@ class ProfileInfoContent extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 1 / 1,
         child: ClipOval(
-          child: FadeInImage.assetNetwork(
-            image:
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
-            fit: BoxFit.cover,
-            placeholder: 'assets/img/user.png',
-            fadeInDuration: const Duration(seconds: 1),
-          ),
+          child: user?.image != null
+              ? FadeInImage.assetNetwork(
+                  image: user!.image!,
+                  fit: BoxFit.cover,
+                  placeholder: 'assets/img/user_image.png',
+                  fadeInDuration: const Duration(seconds: 1),
+                )
+              : // Local image
+                Image.asset('assets/img/user_image.png', fit: BoxFit.cover),
         ),
       ),
     );

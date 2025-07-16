@@ -18,25 +18,28 @@ class ProfileUpdateContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        _imageBackground(context),
-        SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _imageProfile(context),
-                // Spacer(),
-                _cardProfileInfo(context),
-              ],
+    return Form(
+      key: state.formKey,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          _imageBackground(context),
+          SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _imageProfile(context),
+                  // Spacer(),
+                  _cardProfileInfo(context),
+                ],
+              ),
             ),
           ),
-        ),
-        DefaultIconBack(left: 5, top: 50),
-      ],
+          DefaultIconBack(left: 5, top: 50),
+        ],
+      ),
     );
   }
 
@@ -72,7 +75,9 @@ class ProfileUpdateContent extends StatelessWidget {
       margin: EdgeInsets.only(right: 10, top: 20),
       child: FloatingActionButton(
         backgroundColor: Colors.black,
-        onPressed: () {},
+        onPressed: () {
+          bloc?.add(ProfileUpdateFormSubmit());
+        },
         child: Icon(Icons.check, color: Colors.white),
       ),
     );
@@ -148,8 +153,6 @@ class ProfileUpdateContent extends StatelessWidget {
   Widget _imageProfile(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //bloc?.add(ProfileUpdatePickImage());
-        //bloc?.add(ProfileUpdateTakePhoto());
         SelectOptionImageDialog(
           context,
           () => bloc?.add(ProfileUpdatePickImage()),
@@ -162,15 +165,15 @@ class ProfileUpdateContent extends StatelessWidget {
         child: AspectRatio(
           aspectRatio: 1 / 1,
           child: ClipOval(
-            child: state.image != null
-                ? Image.file(state.image!, fit: BoxFit.cover)
-                : FadeInImage.assetNetwork(
-                    image:
-                        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
+            child: state.imageUrl != null
+                ? FadeInImage.assetNetwork(
+                    image: state.imageUrl ?? '',
                     fit: BoxFit.cover,
-                    placeholder: 'assets/img/user.png',
+                    placeholder: 'assets/img/user_image.png',
                     fadeInDuration: const Duration(seconds: 1),
-                  ),
+                  )
+                : // Local image
+                  Image.asset('assets/img/user_image.png', fit: BoxFit.cover),
           ),
         ),
       ),
