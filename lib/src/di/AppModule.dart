@@ -1,11 +1,14 @@
 import 'package:injectable/injectable.dart';
 
 import 'package:store_app/src/data/dataSource/local/SharedPref.dart';
+import 'package:store_app/src/data/dataSource/remote/services/CategoriesService.dart';
 import 'package:store_app/src/data/dataSource/remote/services/UsersService.dart';
 import 'package:store_app/src/data/repository/AuthRepositoryImpl.dart';
 import 'package:store_app/src/data/dataSource/remote/services/AuthService.dart';
+import 'package:store_app/src/data/repository/CategoriesRepositoryImpl.dart';
 import 'package:store_app/src/data/repository/UsersRepositoryImpl.dart';
 import 'package:store_app/src/domain/repository/AuthRepository.dart';
+import 'package:store_app/src/domain/repository/CategoriesRepository.dart';
 import 'package:store_app/src/domain/repository/UsersRepository.dart';
 import 'package:store_app/src/domain/useCases/auth/AuthUseCases.dart';
 import 'package:store_app/src/domain/useCases/auth/GetUserSessionUseCase.dart';
@@ -13,6 +16,8 @@ import 'package:store_app/src/domain/useCases/auth/LoginUseCase.dart';
 import 'package:store_app/src/domain/useCases/auth/LogoutUseCase.dart';
 import 'package:store_app/src/domain/useCases/auth/RegisterUseCase.dart';
 import 'package:store_app/src/domain/useCases/auth/SaveUserSessionUseCase.dart';
+import 'package:store_app/src/domain/useCases/categories/CategoriesUseCases.dart';
+import 'package:store_app/src/domain/useCases/categories/CreateCategoryUseCase.dart';
 import 'package:store_app/src/domain/useCases/users/UpdateUserUsesCase.dart';
 import 'package:store_app/src/domain/useCases/users/UsersUseCases.dart';
 
@@ -29,10 +34,17 @@ abstract class AppModule {
       AuthRepositoryImpl(authService, sharedPref);
 
   @injectable
+  CategoriesService get categoriesService => CategoriesService(sharedPref);
+
+  @injectable
   UsersService get usersService => UsersService(sharedPref);
 
   @injectable
   UsersRepository get usersRepository => UsersRepositoryImpl(usersService);
+
+  @injectable
+  CategoriesRepository get categoriesRepository =>
+      CategoriesRepositoryImpl(categoriesService);
 
   @injectable
   AuthUseCases get authUseCases => AuthUseCases(
@@ -46,4 +58,8 @@ abstract class AppModule {
   @injectable
   UsersUseCases get usersUseCases =>
       UsersUseCases(updateUserUseCase: UpdateUserUseCase(usersRepository));
+
+  @injectable
+  CategoriesUseCases get categoriesUseCases =>
+      CategoriesUseCases(create: CreateCategoryUseCase(categoriesRepository));
 }

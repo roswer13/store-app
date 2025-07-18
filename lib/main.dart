@@ -8,6 +8,7 @@ import 'package:store_app/src/presentation/pages/admin/home/AdminHomePage.dart';
 import 'package:store_app/src/presentation/pages/admin/product/list/AdminProductListPage.dart';
 import 'package:store_app/src/presentation/pages/auth/login/LoginPage.dart';
 import 'package:store_app/src/presentation/pages/auth/register/RegisterPage.dart';
+import 'package:store_app/src/presentation/pages/admin/category/create/AdminCategoryCreatePage.dart';
 import 'package:store_app/src/presentation/pages/client/home/ClientHomePage.dart';
 import 'package:store_app/src/presentation/pages/profile/info/ProfileInfoPage.dart';
 import 'package:store_app/src/presentation/pages/profile/update/ProfileUpdatePage.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           'admin/products': (context) => const AdminProductListPage(),
           'admin/categories': (context) => const AdminCategoryListPage(),
           'client/home': (context) => const ClientHomePage(),
+          'admin/category/create': (context) => const AdminCategoryCreatePage(),
         },
       ),
     );

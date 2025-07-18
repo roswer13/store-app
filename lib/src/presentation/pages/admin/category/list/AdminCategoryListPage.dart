@@ -11,7 +11,14 @@ class _AdminCategoryListPageState extends State<AdminCategoryListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text('This is the Category List Page')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'admin/category/create');
+        },
+        backgroundColor: Colors.black,
+        child: Icon(Icons.add, color: Colors.white),
+      ),
+      body: Center(child: Text('List of Categories will be displayed here.')),
     );
   }
 }
