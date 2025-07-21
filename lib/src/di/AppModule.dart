@@ -18,7 +18,9 @@ import 'package:store_app/src/domain/useCases/auth/RegisterUseCase.dart';
 import 'package:store_app/src/domain/useCases/auth/SaveUserSessionUseCase.dart';
 import 'package:store_app/src/domain/useCases/categories/CategoriesUseCases.dart';
 import 'package:store_app/src/domain/useCases/categories/CreateCategoryUseCase.dart';
+import 'package:store_app/src/domain/useCases/categories/DeleteCategoryUseCase.dart';
 import 'package:store_app/src/domain/useCases/categories/GetCategoriesUseCase.dart';
+import 'package:store_app/src/domain/useCases/categories/UpdateCategoryUseCase.dart';
 import 'package:store_app/src/domain/useCases/users/UpdateUserUsesCase.dart';
 import 'package:store_app/src/domain/useCases/users/UsersUseCases.dart';
 
@@ -64,5 +66,7 @@ abstract class AppModule {
   CategoriesUseCases get categoriesUseCases => CategoriesUseCases(
     create: CreateCategoryUseCase(categoriesRepository),
     getCategories: GetCategoriesUseCase(categoriesRepository),
+    update: UpdateCategoryUseCase(categoriesRepository),
+    delete: DeleteCategoryUseCase(categoriesRepository),
   );
 }

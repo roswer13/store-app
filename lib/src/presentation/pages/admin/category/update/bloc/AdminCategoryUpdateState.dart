@@ -44,6 +44,10 @@ class AdminCategoryUpdateState extends Equatable {
     );
   }
 
+  AdminCategoryUpdateState resetForm() {
+    return AdminCategoryUpdateState(file: null);
+  }
+
   @override
   List<Object?> get props => [id, name, description, file, response];
 }

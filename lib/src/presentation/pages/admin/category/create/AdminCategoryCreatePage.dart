@@ -7,6 +7,8 @@ import 'package:store_app/src/presentation/pages/admin/category/create/AdminCate
 import 'package:store_app/src/presentation/pages/admin/category/create/bloc/AdminCategoryCreateBloc.dart';
 import 'package:store_app/src/presentation/pages/admin/category/create/bloc/AdminCategoryCreateEvent.dart';
 import 'package:store_app/src/presentation/pages/admin/category/create/bloc/AdminCategoryCreateState.dart';
+import 'package:store_app/src/presentation/pages/admin/category/list/bloc/AdminCategoryListBloc.dart';
+import 'package:store_app/src/presentation/pages/admin/category/list/bloc/AdminCategoryListEvent.dart';
 
 class AdminCategoryCreatePage extends StatefulWidget {
   const AdminCategoryCreatePage({super.key});
@@ -27,6 +29,7 @@ class _AdminCategoryCreatePageState extends State<AdminCategoryCreatePage> {
         listener: (context, state) {
           final responseState = state.response;
           if (responseState is Success) {
+            context.read<AdminCategoryListBloc>().add(GetCategories());
             _bloc?.add(AdminCategoryCreateResetForm());
             Fluttertoast.showToast(
               msg: "Category created successfully",

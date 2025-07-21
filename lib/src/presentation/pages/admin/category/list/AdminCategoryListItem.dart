@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/src/domain/models/Category.dart';
+import 'package:store_app/src/presentation/pages/admin/category/list/bloc/AdminCategoryListBloc.dart';
+import 'package:store_app/src/presentation/pages/admin/category/list/bloc/AdminCategoryListEvent.dart';
 
 class AdminCategoryListItem extends StatelessWidget {
+  AdminCategoryListBloc? bloc;
   Category? category;
 
-  AdminCategoryListItem(this.category);
+  AdminCategoryListItem(this.category, this.bloc);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,38 @@ class AdminCategoryListItem extends StatelessWidget {
                     );
                   },
                 ),
-                IconButton(icon: Icon(Icons.delete), onPressed: () {}),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Delete Category'),
+                          content: Text(
+                            'Are you sure you want to delete this category?',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                if (category?.id == null) return;
+                                Navigator.of(context).pop();
+                                bloc?.add(DeleteCategory(category!.id!));
+                              },
+                              child: Text('Delete'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
               ],
             ),
           )

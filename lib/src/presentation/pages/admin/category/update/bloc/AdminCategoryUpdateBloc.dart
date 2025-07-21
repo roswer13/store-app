@@ -23,6 +23,7 @@ class AdminCategoryUpdateBloc
     on<AdminCategoryUpdateFormSubmitted>(_onFormSubmitted);
     on<AdminCategoryUpdatePickImage>(_onPickImage);
     on<AdminCategoryUpdateTakePhoto>(_onTakePhoto);
+    on<AdminCategoryUpdateResetForm>(_onResetForm);
   }
 
   Future<void> _onInit(
@@ -77,12 +78,20 @@ class AdminCategoryUpdateBloc
   ) async {
     emit(state.copyWith(response: Loading(), formKey: formKey));
 
-    Resource response = await categoriesUseCases.create.run(
+    Resource response = await categoriesUseCases.update.run(
+      state.id,
       state.toCategory(),
-      state.file!,
+      state.file,
     );
 
     emit(state.copyWith(response: response, formKey: formKey));
+  }
+
+  Future<void> _onResetForm(
+    AdminCategoryUpdateResetForm event,
+    Emitter<AdminCategoryUpdateState> emit,
+  ) async {
+    emit(state.resetForm());
   }
 
   Future<void> _onPickImage(

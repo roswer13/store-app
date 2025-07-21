@@ -37,6 +37,10 @@ class AdminCategoryUpdateDescriptionChanged extends AdminCategoryUpdateEvent {
   List<Object> get props => [description];
 }
 
+class AdminCategoryUpdateResetForm extends AdminCategoryUpdateEvent {
+  const AdminCategoryUpdateResetForm();
+}
+
 class AdminCategoryUpdateFormSubmitted extends AdminCategoryUpdateEvent {
   const AdminCategoryUpdateFormSubmitted();
 }

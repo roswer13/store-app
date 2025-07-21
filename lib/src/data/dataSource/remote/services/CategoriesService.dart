@@ -103,4 +103,87 @@ class CategoriesService {
       return Error('An error occurred during update: ${e.toString()}');
     }
   }
+
+  Future<Resource<Category>> update(
+    int id,
+    Category category,
+    File? image,
+  ) async {
+    try {
+      print('Updating category with ID: $id');
+      Uri uri = Uri.http(Apiconfig.apiCommerce, '/categories/update/$id');
+      String token = "";
+      final userSession = await sharedPref.read('user_session');
+
+      if (userSession != null) {
+        AuthResponse authResponse = AuthResponse.fromJson(userSession);
+        token = authResponse.token;
+      }
+
+      final request = http.MultipartRequest('PUT', uri);
+      request.headers['Authorization'] = token;
+
+      if (image != null) {
+        request.files.add(
+          http.MultipartFile(
+            'file',
+            http.ByteStream(image.openRead().cast()),
+            await image.length(),
+            filename: basename(image.path),
+            contentType: MediaType('image', 'jpg'),
+          ),
+        );
+      }
+
+      request.fields['name'] = category.name;
+      request.fields['description'] = category.description;
+
+      final response = await request.send();
+      final data = json.decode(
+        await response.stream.transform(utf8.decoder).first,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Category category = Category.fromJson(data);
+        return Success(category);
+      } else {
+        return Error(listToString(data['message']));
+      }
+    } catch (e) {
+      // Handle error
+      print('Error during update category: $e');
+      return Error('An error occurred during update: ${e.toString()}');
+    }
+  }
+
+  Future<Resource<bool>> delete(int id) async {
+    try {
+      print('Deleting category with ID: $id');
+      Uri uri = Uri.http(Apiconfig.apiCommerce, '/categories/delete/$id');
+      String token = "";
+      final userSession = await sharedPref.read('user_session');
+
+      if (userSession != null) {
+        AuthResponse authResponse = AuthResponse.fromJson(userSession);
+        token = authResponse.token;
+      }
+
+      final request = http.MultipartRequest('DELETE', uri);
+      request.headers['Authorization'] = token;
+
+      final response = await request.send();
+
+      print('Response status: ${response.statusCode}');
+
+      if (response.statusCode == 204) {
+        return Success(true);
+      } else {
+        return Error('Failed to delete category with ID: $id');
+      }
+    } catch (e) {
+      // Handle error
+      print('Error during delete category: $e');
+      return Error('An error occurred during delete: ${e.toString()}');
+    }
+  }
 }
