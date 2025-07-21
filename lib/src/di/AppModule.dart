@@ -18,6 +18,7 @@ import 'package:store_app/src/domain/useCases/auth/RegisterUseCase.dart';
 import 'package:store_app/src/domain/useCases/auth/SaveUserSessionUseCase.dart';
 import 'package:store_app/src/domain/useCases/categories/CategoriesUseCases.dart';
 import 'package:store_app/src/domain/useCases/categories/CreateCategoryUseCase.dart';
+import 'package:store_app/src/domain/useCases/categories/GetCategoriesUseCase.dart';
 import 'package:store_app/src/domain/useCases/users/UpdateUserUsesCase.dart';
 import 'package:store_app/src/domain/useCases/users/UsersUseCases.dart';
 
@@ -60,6 +61,8 @@ abstract class AppModule {
       UsersUseCases(updateUserUseCase: UpdateUserUseCase(usersRepository));
 
   @injectable
-  CategoriesUseCases get categoriesUseCases =>
-      CategoriesUseCases(create: CreateCategoryUseCase(categoriesRepository));
+  CategoriesUseCases get categoriesUseCases => CategoriesUseCases(
+    create: CreateCategoryUseCase(categoriesRepository),
+    getCategories: GetCategoriesUseCase(categoriesRepository),
+  );
 }

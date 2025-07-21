@@ -14,4 +14,9 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
   Future<Resource<Category>> create(Category category, File file) {
     return categoriesService.create(category, file);
   }
+
+  @override
+  Future<Resource<List<Category>>> getCategories() {
+    return categoriesService.getCategories();
+  }
 }

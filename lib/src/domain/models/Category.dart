@@ -20,6 +20,10 @@ class Category {
     this.image,
   });
 
+  static List<Category> fromJsonList(List<dynamic> jsonList) {
+    return jsonList.map((json) => Category.fromJson(json)).toList();
+  }
+
   factory Category.fromJson(Map<String, dynamic> json) => Category(
     id: json["id"],
     name: json["name"],

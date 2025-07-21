@@ -70,4 +70,37 @@ class CategoriesService {
       return Error('An error occurred during create category: ${e.toString()}');
     }
   }
+
+  Future<Resource<List<Category>>> getCategories() async {
+    try {
+      print('Getting categories');
+      Uri uri = Uri.http(Apiconfig.apiCommerce, 'categories/getCategories');
+      String token = "";
+      final userSession = await sharedPref.read('user_session');
+
+      if (userSession != null) {
+        AuthResponse authResponse = AuthResponse.fromJson(userSession);
+        token = authResponse.token;
+      }
+
+      final request = http.MultipartRequest('GET', uri);
+      request.headers['Authorization'] = token;
+
+      final response = await request.send();
+      final data = json.decode(
+        await response.stream.transform(utf8.decoder).first,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        List<Category> categories = Category.fromJsonList(data);
+        return Success(categories);
+      } else {
+        return Error(listToString(data['message']));
+      }
+    } catch (e) {
+      // Handle error
+      print('Error during update: $e');
+      return Error('An error occurred during update: ${e.toString()}');
+    }
+  }
 }

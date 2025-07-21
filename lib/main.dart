@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:store_app/blocProviders.dart';
 import 'package:store_app/injection.dart';
 import 'package:store_app/src/presentation/pages/admin/category/list/AdminCategoryListPage.dart';
+import 'package:store_app/src/presentation/pages/admin/category/update/AdminCategoryUpdatePage.dart';
 
 import 'package:store_app/src/presentation/pages/admin/home/AdminHomePage.dart';
 import 'package:store_app/src/presentation/pages/admin/product/list/AdminProductListPage.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
           'admin/categories': (context) => const AdminCategoryListPage(),
           'client/home': (context) => const ClientHomePage(),
           'admin/category/create': (context) => const AdminCategoryCreatePage(),
+          'admin/category/update': (context) => const AdminCategoryUpdatePage(),
         },
       ),
     );
